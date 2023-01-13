@@ -1,164 +1,151 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
-    MDBBtn,
-    MDBCard,
-    MDBCardBody,
-    MDBCardHeader,
-    MDBCardImage,
-    MDBCol,
-    MDBContainer,
-    MDBIcon,
-    MDBInput,
-    MDBListGroup,
-    MDBListGroupItem,
-    MDBRipple,
-    MDBRow,
-    MDBTooltip,
-    MDBTypography,
-    } from "mdb-react-ui-kit";
-    import React from "react";
-import { useSelector } from "react-redux";
-    
-    export default function Cartpage() {
+  getCartTotal,
+  removeItem,
+  decreaseItemQuanity,
+  increaseItemQuanity,
+} from "../features/cartSlice";
 
-      const {cart,totalQuntity,totlaPrice}=useSelector((state)=> state.allCart)
-    return (
-    <section className="h-100 gradient-custom">
-      <MDBContainer className="py-5 h-100">
-        <MDBRow className="justify-content-center my-4">
-          <MDBCol md="8">
-            <MDBCard className="mb-4">
-              <MDBCardHeader className="py-3">
-                <MDBTypography tag="h5" className="mb-0">
-                  Cart - 2 items
-                </MDBTypography>
-              </MDBCardHeader>
-              <MDBCardBody>
-              {
-                cart.map((data)=>(
+const Cartpage = () => {
+  const { cart, totalQuantity, totalPrice } = useSelector(
+    (state) => state.allCart
+  );
 
+  const dispatch = useDispatch();
 
-                <MDBRow>
-                  <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
-                    <MDBRipple rippleTag="div" rippleColor="light"
-                      className="bg-image rounded hover-zoom hover-overlay">
-                      <img
-                        src={data.img}
-                        className="w-100" />
-                      <a href="#!">
-                        <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" , }}>
+  useEffect(() => {
+    dispatch(getCartTotal());
+  }, [cart]);
+
+  return (
+    <div>
+      <section className="h-100 gradient-custom">
+        <div className="container py-5">
+          <div className="row d-flex justify-content-center my-4">
+            <div className="col-md-8">
+              <div className="card mb-4">
+                <div className="card-header py-3">
+                  <h5 className="mb-0">Cart - {cart.length} items</h5>
+                </div>
+                <div className="card-body">
+                  {cart?.map((data) => (
+                    <div className="row">
+                      <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                        <div
+                          className="bg-image hover-overlay hover-zoom ripple rounded"
+                          data-mdb-ripple-color="light"
+                        >
+                          <img
+                            src={data.img}
+                            className="w-100"
+                            alt="Blue Jeans Jacket"
+                          />
                         </div>
-                      </a>
-                    </MDBRipple>
-                  </MDBCol>
-    
-                  <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
-                    <p>
-                      <strong>{data.title}</strong>
-                    </p>
-                    
-    
-                    <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
-                      title="Remove item">
-                      <MDBIcon fas icon="trash" />
-                    </MDBTooltip>
-    
-                    <MDBTooltip wrapperProps={{ size: "sm" , color: "danger" }} wrapperClass="me-1 mb-2"
-                      title="Move to the wish list">
-                      <MDBIcon fas icon="heart" />
-                    </MDBTooltip>
-                  </MDBCol>
-                  <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                    <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-                      <MDBBtn className="px-3 me-2">
-                        <MDBIcon fas icon="minus" />
-                      </MDBBtn>
-    
-                      <MDBInput defaultValue={data.quantity} min={0} type="number" label="Quantity" />
-    
-                      <MDBBtn className="px-3 ms-2">
-                        <MDBIcon fas icon="plus" />
-                      </MDBBtn>
-                    </div>
-    
-                    <p className="text-start text-md-center">
-                      <strong>${data.price}</strong>
-                    </p>
-                  </MDBCol>
-                </MDBRow>
+                      </div>
 
-                ))
-              }
-    
-                <hr className="my-4" />
-    
-               
-              </MDBCardBody>
-            </MDBCard>
-    
-            <MDBCard className="mb-4">
-              <MDBCardBody>
-                <p>
-                  <strong>Expected shipping delivery</strong>
-                </p>
-                <p className="mb-0">12.10.2020 - 14.10.2020</p>
-              </MDBCardBody>
-            </MDBCard>
-    
-            <MDBCard className="mb-4 mb-lg-0">
-              <MDBCardBody>
-                <p>
-                  <strong>We accept</strong>
-                </p>
-                <MDBCardImage className="me-2" width="45px"
-                  src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
-                  alt="Visa" />
-                <MDBCardImage className="me-2" width="45px"
-                  src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
-                  alt="American Express" />
-                <MDBCardImage className="me-2" width="45px"
-                  src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
-                  alt="Mastercard" />
-                <MDBCardImage className="me-2" width="45px"
-                  src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
-                  alt="PayPal acceptance mark" />
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-          <MDBCol md="4">
-            <MDBCard className="mb-4">
-              <MDBCardHeader>
-                <MDBTypography tag="h5" className="mb-0">
-                  Summary
-                </MDBTypography>
-              </MDBCardHeader>
-              <MDBCardBody>
-                <MDBListGroup flush>
-                  <MDBListGroupItem
-                    className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                   Total Quntity
-                    <span>${totalQuntity}</span>
-                  </MDBListGroupItem>
-                 
-                  <MDBListGroupItem
-                    className="d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                    <div>
-                      <strong>Total amount</strong>
-                      
+                      <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                        <p>
+                          <strong>{data.title}</strong>
+                        </p>
+
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm me-1 mb-2"
+                          data-mdb-toggle="tooltip"
+                          title="Remove item"
+                          onClick={() => dispatch(removeItem(data.id))}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </div>
+
+                      <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                        <div
+                          className="d-flex mb-4"
+                          style={{ maxWidth: "300px" }}
+                        >
+                          <button
+                            className="btn btn-primary px-3 me-2"
+                            onClick={() =>
+                              dispatch(decreaseItemQuanity(data.id))
+                            }
+                          >
+                            <i className="fas fa-minus"></i>
+                          </button>
+
+                          <div className="form-outline">
+                            <input
+                              id="form1"
+                              min="0"
+                              name="quantity"
+                              value={data.quantity}
+                              type="number"
+                              className="form-control"
+                              onChange={() => null}
+                            />
+                            <label className="form-label" for="form1">
+                              Quantity
+                            </label>
+                          </div>
+
+                          <button
+                            className="btn btn-primary px-3 ms-2"
+                            onClick={() =>
+                              dispatch(increaseItemQuanity(data.id))
+                            }
+                          >
+                            <i className="fas fa-plus"></i>
+                          </button>
+                        </div>
+
+                        <p className="text-start text-md-center">
+                          <strong>{data.price}</strong>
+                        </p>
+                      </div>
+                      <hr className="my-4" />
                     </div>
-                    <span>
-                      <strong>${totlaPrice}</strong>
-                    </span>
-                  </MDBListGroupItem>
-                </MDBListGroup>
-    
-                <MDBBtn block size="lg">
-                  Go to checkout
-                </MDBBtn>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-    </section>
-    );
-    }
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card mb-4">
+                <div className="card-header py-3">
+                  <h5 className="mb-0">Summary</h5>
+                </div>
+                <div className="card-body">
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                      Total Quantity
+                      <span>{totalQuantity}</span>
+                    </li>
+
+                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                      <div>
+                        <strong>Total amount</strong>
+                      </div>
+                      <span>
+                        <strong>{totalPrice}</strong>
+                      </span>
+                    </li>
+                  </ul>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-lg btn-block"
+                  >
+                    Go to checkout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Cartpage;
